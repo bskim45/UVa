@@ -1,12 +1,11 @@
 #include <iostream>
-#include <vector>
-#include <set>
 #include <algorithm>
+#include <unordered_map>
 
 using namespace std;
 
 int board[70][70] = { 0 };
-set<int> sums[70][70];
+unordered_map<int, bool> sums[70][70];
 
 void init() {
     for (int i = 0; i < 70; i++) {
@@ -36,8 +35,8 @@ int main() {
             }
         }
 
-        sums[2 * rows - 1][1].insert(board[2 * rows - 1][1]);
-        sums[2 * rows - 1][1].insert(-board[2 * rows - 1][1]);
+        sums[2 * rows - 1][1][board[2 * rows - 1][1]] = true;
+        sums[2 * rows - 1][1][-board[2 * rows - 1][1]] = true;
 
         for (int i = rows * 2 - 1; i >= 2; i--) {
             if (i > rows) {
@@ -46,15 +45,15 @@ int main() {
                         if (board[i - 1][j] != -1) {
 
                             // left
-                            sums[i - 1][j].insert(*iter + board[i-1][j]);
-                            sums[i - 1][j].insert(*iter - board[i-1][j]);
+                            sums[i - 1][j][iter->first + board[i - 1][j]] = true;
+                            sums[i - 1][j][iter->first - board[i - 1][j]] = true;
                         }
 
                         if (board[i - 1][j + 1] != -1) {
 
                             // right
-                            sums[i - 1][j + 1].insert(*iter + board[i-1][j+1]);
-                            sums[i - 1][j + 1].insert(*iter - board[i-1][j+1]);
+                            sums[i - 1][j + 1][iter->first + board[i - 1][j + 1]] = true;
+                            sums[i - 1][j + 1][iter->first - board[i - 1][j + 1]] = true;
                         }
                     }
                 }
@@ -64,26 +63,26 @@ int main() {
                     for (auto iter = sums[i][j].begin(); iter != sums[i][j].end(); ++iter) {
                         if (board[i - 1][j - 1] != -1) {
                             // left
-                            sums[i - 1][j - 1].insert(*iter + board[i-1][j-1]);
-                            sums[i - 1][j - 1].insert(*iter - board[i-1][j-1]);
+                            sums[i - 1][j - 1][iter->first + board[i - 1][j - 1]] = true;
+                            sums[i - 1][j - 1][iter->first - board[i - 1][j - 1]] = true;
                         }
 
                         if (board[i - 1][j] != -1) {
                             // right
-                            sums[i - 1][j].insert(*iter + board[i-1][j]);
-                            sums[i - 1][j].insert(*iter - board[i-1][j]);
+                            sums[i - 1][j][iter->first + board[i - 1][j]] = true;
+                            sums[i - 1][j][iter->first - board[i - 1][j]] = true;
                         }
                     }
                 }
             }
         }
 
-        auto min_elem = min_element(sums[1][1].begin(), sums[1][1].end(), [](const int& a, const int& b)
+        auto min_elem = min_element(sums[1][1].begin(), sums[1][1].end(), [](const pair<int, bool> &a, const pair<int, bool> &b)
         {
-            return abs(a) < abs(b);
+            return abs(a.first) < abs(b.first);
         });
 
-        cout << abs(*min_elem) << endl;
+        cout << abs(min_elem->first) << endl;
         cin >> rows;
     }
 
