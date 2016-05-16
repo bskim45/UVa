@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <climits>
+#include <cstring>
 
 using namespace std;
 
@@ -32,19 +33,13 @@ int main(void) {
             cin >> chops[i];
         }
 
-        // init dp array
-        for(int i = 0; i <= k; i++) {
-            for(int j = 0; j <= n; j++) {
-                dp[i][j] = INT_MAX;
-            }
-        }
-
-        // initial value
-        for(int i = 0; i <= n; i++) {
-            dp[0][i] = 0;
-        }
+        memset(dp, 0, 5001);
 
         for(int i = 1; i <= k; i++) {
+            for(int j = 0; j < i * 3; j++) {
+                dp[i][j] = INT_MAX;
+            }
+
             for(int j = i * 3; j <= n; j++) {
                 dp[i][j] = min(dp[i][j-1], dp[i-1][j-2] + (chops[j-1]-chops[j]) * (chops[j-1]-chops[j]));
             }
