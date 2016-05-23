@@ -9,7 +9,7 @@ using namespace std;
 
 /*
  * dp[i][j] -> cost to s[i] where fuel is j
- *          = dp[i - 1][j + dis + fill] + c[i].price * fill
+ *          = dp[i - 1][j + distance - fill] + c[i].price * fill
  */
 typedef struct {
     int distance;
@@ -20,7 +20,7 @@ Station s[102];
 int dp[102][201];
 
 int main(void) {
-//    ios::sync_with_stdio(false);
+    ios::sync_with_stdio(false);
 
     int case_num = 0;
     cin >> case_num;
