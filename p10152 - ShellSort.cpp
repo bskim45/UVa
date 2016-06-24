@@ -20,7 +20,7 @@ int main(void) {
         cin >> lines;
         vector<string> unsorted(lines);
         map<string, int> position;
-        vector<string> sequence;
+        vector<pair<string, int>> sequence;
         
         // io fix
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -39,18 +39,20 @@ int main(void) {
         int moves = 0;
 
         for(int i = 0; i < lines; i++) {
-            if (position[unsorted[i]] != i - moves) {
+            int pos = position[unsorted[i]];
+
+            if (pos != i - moves) {
                 moves++;
-                sequence.push_back(unsorted[i]);
+                sequence.push_back(make_pair(unsorted[i], pos));
             }
         }
 
-        sort(sequence.begin(), sequence.end(), [&](const string& a, const string& b) {
-            return position[a] < position[b];
+        sort(sequence.begin(), sequence.end(), [&](const pair<string, int>& a, const pair<string, int>& b) {
+            return a.second < b.second;
         });
 
-        for_each(sequence.begin(), sequence.end(), [](const string& s) {
-            cout << s << endl;
+        for_each(sequence.begin(), sequence.end(), [](const pair<string, int>& s) {
+            cout << s.first << endl;
         });
 
         cout << endl;
