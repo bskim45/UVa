@@ -1,40 +1,43 @@
+#include <stdio.h>
+#include <string.h>
 #include <iostream>
-#include <sstream>
-#include <limits>
-#include <vector>
 
-using namespace std;
+#define FLUSH while(getchar() != '\n');
 
-vector<string> unsorted(200);
-vector<string> sorted(200);
+char unsorted[200][100];
+char sorted[200][100];
 
 int main(void) {
-    ios::sync_with_stdio(false);
+    std::ios_base::sync_with_stdio(false);
 
     int case_num, lines;
-    cin >> case_num;
+    scanf("%d", &case_num);
+
+    FLUSH
 
     for (int case_idx = 0; case_idx < case_num; case_idx++) {
-
-        cin >> lines;
+        scanf("%d", &lines);
 
         // io fix
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        FLUSH
+
+        memset(unsorted, 0, sizeof unsorted);
+        memset(unsorted, 0, sizeof sorted);
 
         // parse lines
         for (int i = lines - 1; i >= 0; i--) {
-            getline(cin, unsorted[i]);
+            gets(unsorted[i]);
         }
 
         for (int i = lines - 1; i >= 0; i--) {
-            getline(cin, sorted[i]);
+            gets(sorted[i]);
         }
 
         // compare
         int moves = 0;
 
         for (int i = 0, j = 0; i < lines && j < lines; i++) {
-            if (unsorted[i] != sorted[j]) {
+            if (strcmp(unsorted[i], sorted[j]) != 0) {
                 moves++;
             }
             else {
@@ -43,10 +46,10 @@ int main(void) {
         }
 
         for (int i = lines - moves; i < lines; i++) {
-            cout << sorted[i] << endl;
+            printf("%s\n", sorted[i]);
         }
 
-        cout << endl;
+        printf("\n");
 
     }
 
