@@ -37,12 +37,21 @@ int main(void) {
         int half_sum = sum / 2;
 
         weight[0] = 1LL << 0;
+        int seek = 0;
 
         for (int i = 1; i <= lines; i++) {
             int w = people[i];
-            for (int j = upper; j >= w; j--) {
+            
+            seek = min(seek + w, upper);
+
+            for (int j = seek; j >= w; j--) {
                 if(weight[j - w])
                     weight[j] |= weight[j - w] << 1;
+
+                // found solution, stop update
+                if(j == half_sum && (weight[j] & (1LL << half) || !isEven && weight[j] & (1LL << half + 1))) {
+                    break;
+                }
             }
         }
 
